@@ -18,10 +18,10 @@ int melody[6] = {NOTE_E4, NOTE_E4, NOTE_E4, NOTE_C4, NOTE_E4, NOTE_G4};
 int noteDurations[6] = {8,4,4,8,4,2};
 int BUZZER_PIN = 13;
 
-void play_tone(void * parameter){
+int play_tone(void){
 // void play_tone(void){
     // Pause the task again for 500ms
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    delay(200 / portTICK_PERIOD_MS);
     Serial.print("Task Buzzer is running on: ");
     Serial.println(xPortGetCoreID());
     for (int i = 0; i < 6; i++) {
@@ -32,19 +32,20 @@ void play_tone(void * parameter){
         noTone(BUZZER_PIN);
     }
     Serial.println("Completed Buzzer!");
-    vTaskDelete(NULL);
+    // Delete(NULL);
+    return 0;
 }
 
-void createBuzzerTask(void){
-    xTaskCreatePinnedToCore(
-        play_tone,    // Function that should be called
-        "play_tone",   // Name of the task (for debugging)
-        1000,            // Stack size (bytes)
-        NULL,            // Parameter to pass
-        1,               // Task priority
-        &Task_buzzer,             // Task handle
-        1
-    );
-}
+// void createBuzzerTask(void){
+//     xTaskCreatePinnedToCore(
+//         play_tone,    // Function that should be called
+//         "play_tone",   // Name of the task (for debugging)
+//         1000,            // Stack size (bytes)
+//         NULL,            // Parameter to pass
+//         1,               // Task priority
+//         &Task_buzzer,             // Task handle
+//         1
+//     );
+// }
 
 #endif

@@ -7,12 +7,12 @@
 #include <Arduino.h>
 
 #include "lib/epaper/EPaper.h"
-#include "lib/battery.h"
-#include "lib/buzzer.h"
-#include "lib/Sleep.h"
-#include "lib/settimer.h"
-#include "lib/ble.h"
-#include "lib/led.h"
+#include <lib/battery.h>
+#include <lib/buzzer.h>
+#include <lib/Sleep.h>
+#include <lib/settimer.h>
+#include <lib/ble.h>
+#include <lib/led.h>
 
 Sleep light_sleep;
 EpaperDriver epd;

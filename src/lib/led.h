@@ -28,13 +28,14 @@ public:
     
     int start_led = 0;
 
-    void init(void){
+    int init(void){
         /* LED Strip setup */
         pixels.setBrightness(100);
         pixels.begin(); // INITIALIZE NeoPixel strip object 
         pixels.clear();
         pixels.show();
         Serial.println("LED initiated");
+        return 0;
     }
 
     void set(int i){
@@ -76,7 +77,7 @@ public:
         }
     }
 
-     void handle2(void){
+    int handle2(void){
         unsigned long time = millis();
         switch(led_state){
             case 1:
@@ -116,6 +117,7 @@ public:
             }
             break;
         }
+        return 0;
     }
 
     int get_state(void){

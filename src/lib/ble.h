@@ -191,9 +191,9 @@ class MyCallbacks: public BLECharacteristicCallbacks {
   }
 };
 
-void ble_init(void){
+int ble_init(void){
   is_ble_init = 1;
-  Serial.println("Starting BLE work!");
+  // Serial.println("BLE Initiated!");
   BLEDevice::init("BeaconS23");
   BLEDevice::setPower(ESP_PWR_LVL_N14);
   // BLEDevice::setMTU(MTU_SIZE);
@@ -225,6 +225,7 @@ void ble_init(void){
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
+  return 0;
 }
 
 void ble_deinit(){

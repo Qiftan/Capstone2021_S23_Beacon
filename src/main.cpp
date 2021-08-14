@@ -1,14 +1,16 @@
 /* 
-Author  : Tan Qi Feng
-Date    : 15/06/2021
-Description:
-  Updated on 15/07/2021
-  Updated on 13/07/2021
+Author          : Tan Qi Feng
+Date Created    : 15/06/2021
+Date Modified   : 14/08/2021
   
 */
 
-#include "main.h"
+// #define TEST true
 
+#ifdef TEST
+//Test Enabled
+#else
+#include "main.h"
 /******************************************************************************
 Setup
 ******************************************************************************/
@@ -18,32 +20,35 @@ void setup() {
   Serial.print("main is running on: ");
   Serial.println(xPortGetCoreID());
   set_cpu_freq();
-
+  Serial.println("CPU speed set!");
+  
   // Battery setup
   adc.attach(adc_pin);
   battery_level = get_battery_level();
-
+  
   ble_init();
+  Serial.println("BLE Initiated!");
 
   // E-paper setup
   DEV_Module_Init();
+  Serial.println("E-paper GPIO Configured!");
   // EPD_7IN5BC_Init();
   // EPD_7IN5B_V2_Init();
   // EPD_7IN5_V2_Init();
   
   //set one second timer interrupt
   set_one_second_timer();
+  Serial.println("One second interrupt timer set!");
 
   // LED setup
   led.init();
-
+  Serial.println("LED Initiated!");
 }
 
 /******************************************************************************
 Loop
 ******************************************************************************/
 void loop() {
-
   // if epaper is idling, 
   // initiate epaper by clearing the screen, then display the defualt page.
   if(epd.get_state() == 0 && !epd.is_epaper_active()){
@@ -123,8 +128,9 @@ void loop() {
   // Play the welcome tune when BLE is connected together with the epaper
   if(start_buzzer == 1){
     start_buzzer = 0;
-    createBuzzerTask(); 
-    // play_tone();
+    // createBuzzerTask(); 
+    play_tone();
+    Serial.println("Completed Buzzer!");
   }
 
   // Handles the LEDs operation when BLE is connected.
@@ -193,3 +199,4 @@ void loop() {
   }
 
 }
+#endif

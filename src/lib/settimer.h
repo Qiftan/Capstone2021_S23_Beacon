@@ -17,7 +17,7 @@ void IRAM_ATTR onTime() {
    portEXIT_CRITICAL_ISR(&timerMux);
 }
 
-void set_one_second_timer(void){
+int set_one_second_timer(void){
     // Configure the Prescaler at 80 the quarter of the ESP32 is cadence at 80Mhz
     // 80000000 / 80 = 1000000 tics / seconde
     timer = timerBegin(0, 80, true);                
@@ -29,6 +29,7 @@ void set_one_second_timer(void){
     // 50ms  -> 2000*50 = 100,000
     timerAlarmWrite(timer, 2000000, true);         
     timerAlarmEnable(timer);
+    return 0;
 }
 
 #endif
