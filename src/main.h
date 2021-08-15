@@ -12,9 +12,6 @@ Date Modified   : 15/08/2021
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-// #include <unity.h>
-// #include <iostream>
-// #include <string>
 #include <Arduino.h>
 
 #include "lib/epaper/EPaper.h"
