@@ -1,3 +1,14 @@
+/* 
+Project         : Capstone 2021 S23 Future Of Health
+Project Name    : LINKing
+Company         : Changi General Hospital and Singapore University Of Technology And Design
+File            : main.h
+Author          : Tan Qi Feng
+Date Created    : 15/06/2021
+Date Modified   : 15/08/2021
+  
+*/
+
 #ifndef _MAIN_H_
 #define _MAIN_H_
 

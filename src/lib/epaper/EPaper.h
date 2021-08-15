@@ -1,3 +1,15 @@
+/* 
+Project         : Capstone 2021 S23 Future Of Health
+Project Name    : LINKing
+Company         : Changi General Hospital and Singapore University Of Technology And Design
+File            : EPaper.h
+Author          : Tan Qi Feng
+Date Created    : 15/06/2021
+Date Modified   : 15/08/2021
+  
+*/
+
+
 #ifndef _EPAPER_H_
 #define _EPAPER_H_
 
@@ -29,9 +41,12 @@ class EpaperDriver {
         String queue = "";
         int is_change_image = 0;
 
-        int debug_start_time = 0;
-
     public:
+        /*
+            Handles the epaper actions
+            -> printing image or clearing the screen
+            -> handles if epaper not responsive or not connected
+        */
         void handlingEpaperDisplay(void){
             // if(!EPD_7IN5BC_isBusy()){
             // if(!EPD_7IN5B_V2_isBusy()){
@@ -62,13 +77,11 @@ class EpaperDriver {
                 }
                 break;
                 }
-                // EPD_7IN5B_V2_TurnOnDisplay_1();
-                // e_paper_cmd = 0;
-                // is_e_paper_successful = true;
-                // is_e_paper_cmd_issued = false;
-                // epaper_command = 'r';
-                // Serial.println("e_paper: running!");
             }else{
+                /*
+                    if action counter overflow timeout
+                    -> epaper not responsive or is not connected
+                */
                 if (epaper_action_counter>timeOut){
                     is_e_paper_successful = false;
                     is_e_paper_cmd_issued = false;
@@ -166,15 +179,6 @@ class EpaperDriver {
 
         void set_state(int state){
             epaper_state_int = state;
-            // if (epaper_state_int == 0){
-            //     epaper_state = "idle";
-            // }
-            // else if (epaper_state_int == 1){
-            //     epaper_state = "initiated";
-            // }
-            // else if (epaper_state_int == 2){
-            //     epaper_state = "displaying";
-            // }
         }
         int get_state(void){
             return epaper_state_int;
@@ -212,6 +216,12 @@ class EpaperDriver {
             Serial.println("'");
         }
 
+        /*
+            main run function to be call
+            Read the queue
+            -> if queue not cleared: do the action in the queue
+            -> else: do nothing
+        */
         void run(void){
            
             if(!isEpaperProcessing() && is_epaper_active()){

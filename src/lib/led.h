@@ -1,3 +1,14 @@
+/* 
+Project         : Capstone 2021 S23 Future Of Health
+Project Name    : LINKing
+Company         : Changi General Hospital and Singapore University Of Technology And Design
+File            : led.h
+Author          : Tan Qi Feng
+Date Created    : 15/06/2021
+Date Modified   : 15/08/2021
+  
+*/
+
 #ifndef _LED_H_
 #define _LED_H_
 
@@ -43,44 +54,39 @@ public:
         pixels.show();   // Send the updated pixel colors to the hardware.
     }
 
-    void handle(void){
-        if (start_bool==1){
-            unsigned long time = millis();
-            if(time-start_time >= 100){
-                if(count_led < NUMPIXELS){
-                    set(led_pos); 
-                    if (led_direction==0){
-                        led_pos++;
-                    }else{
-                        led_pos--;
-                    }
-                }
-                start_time = time;
-                count_led++;
-                if(count_led > NUMPIXELS && count_led_done <= count_led_done_timeout){
-                    pixels.clear();
-                    pixels.show();
-                    count_led = 0;
-                    count_led_done++;
-                    if (led_direction==0){
-                        led_direction = 1;
-                        led_pos = NUMPIXELS - 1;
-                    }else{
-                        led_direction = 0;
-                        led_pos = 0;
-                    }
-                }
-            }
-            if(count_led > (NUMPIXELS + count_led_timeout)){
-                stop();
-            }
-        }
-    }
-
     int handle2(void){
         unsigned long time = millis();
         switch(led_state){
             case 1:
+            /* 
+                LED action: * -> Single LED lit up
+                Change every 100ms
+                [          ] <- Left to Right
+                [*         ]
+                [**        ]
+                [***       ]
+                [****      ]
+                [*****     ]
+                [******    ]
+                [*******   ]
+                [********  ]
+                [********* ]
+                [**********]
+                [          ] <- Changes direction: Right to Left
+                [         *]
+                [        **]
+                [       ***]
+                [      ****]
+                [     *****]
+                [    ******]
+                [   *******]
+                [  ********]
+                [ *********]
+                [**********]
+
+                Cycles = count_led_done_timeout
+
+            */
             if(time-start_time >= 100){
                 if(count_led < NUMPIXELS){
                     set(led_pos); 
@@ -108,6 +114,10 @@ public:
             }
             break;
             case 2:
+            /*
+                Seconds before turning off the LEDs
+                    = count_led_timeout * 100ms
+            */
             if(time-start_time >= 100){
                 if(count_led_0 > count_led_timeout){
                     stop();
@@ -122,7 +132,6 @@ public:
 
     int get_state(void){
         return led_state;
-        // return start_bool;
     }
 
     void set_state(int state){

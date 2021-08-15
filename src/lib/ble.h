@@ -1,17 +1,21 @@
+/* 
+Project         : Capstone 2021 S23 Future Of Health
+Project Name    : LINKing
+Company         : Changi General Hospital and Singapore University Of Technology And Design
+File            : ble.h
+Author          : Tan Qi Feng
+Date Created    : 15/06/2021
+Date Modified   : 15/08/2021
+  
+*/
+
 #ifndef _BLE_H_
 #define _BLE_H_
 
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
-// #include <stdlib.h>
 #include "lib/util.h"
-
-/***
-  "b6e4af9e-e48a-11eb-ba80-0242ac130004"  NA20 Fruit Tree
-  "c0b9a99a-e488-11eb-ba80-0242ac130004"  NA12 Com Garden
-  "71e81e3a-e48a-11eb-ba80-0242ac130004"  G2 Dog Run
-***/
 
 #define SERVICE_UUID        "b6e4af9e-e48a-11eb-ba80-0242ac130004" 
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
@@ -29,7 +33,7 @@ BLEService *pService;
 BLECharacteristic *pCharacteristic;
 BLEAdvertising *pAdvertising;
 std::string msg = "BeaconS23 Batt ";
-std::string rx_test_msg = "61";
+std::string rx_test_msg = "61"; // Identifier to test against with data from the app to authenticate the app data
 int rx_cmd = 0;
 unsigned long start_time = 0;
 int count_rx = 0;
@@ -63,10 +67,21 @@ std::__cxx11::string update_ble_msg(String m){
 //   }
 // }
 
+/**
+ *  Function  :   void ble_decode_rx_msg(std::string value)
+ *  Purpose   :   Decode the received characteristic by
+ *                converting the each character in a string 
+ *                into single char and save into a predefined 
+ *                saveImage[48000] variable. 
+**/
 void ble_decode_rx_msg(std::string value){
  unsigned long size = value.size();
   // Serial.println(val_size);
-  if( size > 2){
+  /* 
+    If received msg has length larger than 2 bytes
+    -> then decode the msg
+  */
+  if(size > 2){
     
     is_rx_completed = 0;
     int rx_size = int(convert_string_to_char(value.substr(MSG_FRONT_SIZE-2,1),1));
@@ -77,7 +92,12 @@ void ble_decode_rx_msg(std::string value){
     Serial.print("time: ");Serial.print(millis()-start_time);Serial.print(" ms");Serial.print("\t");
     Serial.print("Command: ");Serial.println(rx_cmd);
 
-
+    /** Received command 
+     *  1 -> reset the image to default
+     *  2 -> show the image that was sent over
+     *  3 -> send image over but do not change the image display
+     *  4 -> send and change the image
+    **/
     switch(rx_cmd){
       case 1:
       // Serial.println("Resetting the image...");
@@ -100,16 +120,27 @@ void ble_decode_rx_msg(std::string value){
 
     count_rx++;
     
+    /* 
+      if all message to be send from app have completed based on the number of Bytes
+      specified in the third byte of the whole received bytes per transfer.
+    */
     if (count_rx >= rx_size - 1){
       is_rx_completed = 1;
     } 
 
+    /* 
+      if the recieved command is invalid
+    */
     if(rx_cmd>5){
       rx_cmd = 0;
       is_rx_completed = 0;
     }
 
   }else{
+    /* 
+      No message bytes send over
+      Only the 2 bytes that represent the identifier of the app.
+    */
     count_rx = 0;
   }
 }
@@ -159,32 +190,19 @@ class MyServerCallbacks: public BLEServerCallbacks {
     };
 };
 
-int StrToHex(char str[])
-{
-  return (int) strtol(str, 0, 16);
-}
-
 class MyCallbacks: public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *pCharacteristic) {
     std::string value = pCharacteristic -> getValue();
 
     pCharacteristic -> setValue(update_ble_msg(String(battery_level)));
-    
-    // if (value.length() > 0 ) {
-    //   Serial.print("\r\nNew value: ");
-    //   for (int i = 0; i < value.length(); i++) {
-    //     Serial.print(value[i]);
-    //   }
-    // }
-    // Serial.print("\n msg ?? : ");
-    // Serial.println(value.c_str());
-    // count_rx++;
-    // Serial.print("Received times: ");
-    // Serial.print(count_rx);
-    // Serial.print(", \tsize: ");
    
     ble_decode_rx_msg(value);
 
+    /* 
+      the identifier from the app matched
+      -> then authentication successful
+      -> then set connection true.
+    */
     if(value.substr(0,2) == rx_test_msg){
       deviceConnectedBool = true;
     }
@@ -220,8 +238,8 @@ int ble_init(void){
   // pAdvertising->setMinInterval(0x035E);
   // pAdvertising->setMaxInterval(0x0490); // 670 ms interval 
   // pAdvertising->setMinInterval(0x045E);
-  pAdvertising->setMaxInterval(0x0590); // 800 ms interval 
-  pAdvertising->setMinInterval(0x055E);
+  pAdvertising->setMaxInterval(0x0590); // 800 ms interval set maximum advertising interval
+  pAdvertising->setMinInterval(0x055E); //                 set minimum advertising interval
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();

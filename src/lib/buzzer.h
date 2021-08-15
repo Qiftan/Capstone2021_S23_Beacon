@@ -1,3 +1,15 @@
+/* 
+Project         : Capstone 2021 S23 Future Of Health
+Project Name    : LINKing
+Company         : Changi General Hospital and Singapore University Of Technology And Design
+File            : buzzer.h
+Author          : Tan Qi Feng
+Date Created    : 15/06/2021
+Date Modified   : 15/08/2021
+  
+*/
+
+
 #ifndef _BUZZER_H_
 #define _BUZZER_H_
 
@@ -19,8 +31,6 @@ int noteDurations[6] = {8,4,4,8,4,2};
 int BUZZER_PIN = 13;
 
 int play_tone(void){
-// void play_tone(void){
-    // Pause the task again for 500ms
     delay(200 / portTICK_PERIOD_MS);
     Serial.print("Task Buzzer is running on: ");
     Serial.println(xPortGetCoreID());
