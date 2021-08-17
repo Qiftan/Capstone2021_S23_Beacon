@@ -11,7 +11,6 @@ Resources/Technical Document/Beacon_technical_document.fdb_latexmk
 Resources/Technical Document/beacon_technical_document.fls
 Resources/Technical Document/beacon_technical_document.log
 Resources/Technical Document/beacon_technical_document.out
-Resources/Technical Document/beacon_technical_document.pdf
 Resources/Technical Document/beacon_technical_document.run.xml
 Resources/Technical Document/beacon_technical_document.synctex.gz
 Resources/Technical Document/beacon_technical_document.tex
@@ -30,6 +29,7 @@ Resources/Technical Document/images/gettingbattandroid.jpg
 Resources/Technical Document/images/isBusy.jpg
 Resources/Technical Document/images/ledHandle.jpg
 Resources/Technical Document/images/ledHandle2.jpg
+Resources/Technical Document/images/f13.jpg
 Resources/Technical Document/images/nn1.png
 Resources/Technical Document/images/nn2.png
 Resources/Technical Document/images/nn3.png
